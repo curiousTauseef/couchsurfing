@@ -1,3 +1,10 @@
+---
+title: "couchsurf"
+author: "Mikhailov"
+date: "06 05 2017"
+output: html_document
+---
+
 # библиотеки
 ```{r}
 set.seed(9)
@@ -20,7 +27,7 @@ df <- bind_rows(df, .id = 'id_friend')
 attach(df)
 df = select(df, id_friend, about.countries.visited)
 df = filter(df, about.countries.visited != "list()" )
-
+      
 #about.countries.lived, referenceCount, status, gender, publicAge, publicName, publicAddress.description)
 
 # разлистили (перевели из list в обычный формат)
