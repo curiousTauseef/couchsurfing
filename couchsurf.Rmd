@@ -49,9 +49,17 @@ data.main$id_friend = as.numeric(data.main$id_friend)
 ```
 
 # попытались перевести данные в формат realRatingMatrix
+
+```{r}
+data.main = select(data.main, -id_friend)
+data.main = ifelse(data.main>=1,1,0)
+```
+
+
 ```{r}
 data_matrix = as.matrix(data.main)
-data_matrix = as(data_matrix, "realRatingMatrix")
+
+data_matrix = as(data_matrix, "binaryRatingMatrix")
 ```
 
 # разделение на тестовую и обучающую выборки
