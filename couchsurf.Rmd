@@ -46,19 +46,17 @@ data.main = data.frame(predict(dmy, newdata = data_without_id))
 data.main = bind_cols(id, data.main)
 data.main = data.main %>% group_by(id_friend) %>% summarise_each(funs(sum))
 data.main$id_friend = as.numeric(data.main$id_friend)
+
+names(data.main) = substring(names(data.main), 5)
+names(data.main)[1] = "id_friend"
 ```
 
-# попытались перевести данные в формат realRatingMatrix
+# попытались перевести данные в формат binaryRatingMatrix
 
 ```{r}
 data.main = select(data.main, -id_friend)
 data.main = ifelse(data.main>=1,1,0)
-```
-
-
-```{r}
 data_matrix = as.matrix(data.main)
-
 data_matrix = as(data_matrix, "binaryRatingMatrix")
 ```
 
@@ -72,20 +70,20 @@ recc_data_test <- data_matrix[test_ind, ]
 # попытка построить рекоммендательную систему
 ```{r}
 recc_model <- Recommender(data = recc_data_train, method = "UBCF")
-recc_model
+#recc_model
 
-model_details <- getModel(recc_model)
-model_details$description
-model_details$sim[1:5, 1:5]
+#model_details <- getModel(recc_model)
+#model_details$description
+#model_details$sim[1:5, 1:5]
 
 recc_predicted <- predict(object = recc_model, newdata = recc_data_test, n = 6)
-recc_predicted
+#recc_predicted
 
-str(recc_predicted)
+#str(recc_predicted)
 
 recc_user_1 <- recc_predicted@items[[1]]
 recc_user_1
-movies_user_1 <- recc_predicted@itemLabels[recc_user_1]
-movies_user_1
+country_user_1 <- recc_predicted@itemLabels[recc_user_1]
+country_user_1
 ```
 
