@@ -18,43 +18,44 @@ library(recommenderlab)
 
 # проитали json и привели в божеский вид
 ```{r}
-df <- fromJSON("~/couchsurf/infol1.json", flatten=TRUE)
-df <- bind_rows(df, .id = 'id_friend')
+setwd("~/repositories/couchsurfing")
+df <- fromJSON("infol1.json", flatten=TRUE)
+df <- bind_rows(df, .id = 'user_id')
 ```
 
 #оставили только айди друганов и их страны
 ```{r}
 attach(df)
-df = select(df, id_friend, about.countries.visited)
-df = filter(df, about.countries.visited != "list()" )
+df = dplyr::select(df, user_id, id, about.countries.visited)
+df = dplyr::filter(df, about.countries.visited != "list()" )
       
 #about.countries.lived, referenceCount, status, gender, publicAge, publicName, publicAddress.description)
 
 # разлистили (перевели из list в обычный формат)
 df = unnest(df, about.countries.visited)
-df = select(df, id_friend, name)
+df = dplyr::select(df, user_id, name)
 ```
 
 #дамифицировали
 ```{r}
-data_without_id = select(df, name)
-id = select(df, id_friend)
+data_without_id = dplyr::select(df, name)
+id = dplyr::select(df, user_id)
 
 
 dmy = dummyVars("~.", data = data_without_id)
 data.main = data.frame(predict(dmy, newdata = data_without_id))
 data.main = bind_cols(id, data.main)
-data.main = data.main %>% group_by(id_friend) %>% summarise_each(funs(sum))
-data.main$id_friend = as.numeric(data.main$id_friend)
+data.main = data.main %>% group_by(user_id) %>% summarise_each(funs(sum))
+data.main$id_friend = as.numeric(data.main$user_id)
 
 names(data.main) = substring(names(data.main), 5)
-names(data.main)[1] = "id_friend"
+names(data.main)[1] = "user_id"
 ```
 
 # попытались перевести данные в формат binaryRatingMatrix
 
 ```{r}
-data.main = select(data.main, -id_friend)
+data.main = dplyr::select(data.main, -user_id)
 data.main = ifelse(data.main>=1,1,0)
 data_matrix = as.matrix(data.main)
 data_matrix = as(data_matrix, "binaryRatingMatrix")
@@ -81,7 +82,7 @@ recc_predicted <- predict(object = recc_model, newdata = recc_data_test, n = 6)
 
 #str(recc_predicted)
 
-recc_user_1 <- recc_predicted@items[[1]]
+recc_user_1 <- recc_predicted@items[[5]]
 recc_user_1
 country_user_1 <- recc_predicted@itemLabels[recc_user_1]
 country_user_1
