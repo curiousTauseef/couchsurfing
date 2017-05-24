@@ -10,7 +10,9 @@ shinyUI(pageWithSidebar(
               value = "", 
               width = NULL),
     
-    numericInput("obs", "Количество вариантов:", 5)
+    numericInput("obs", "Количество вариантов:", 5),
+    
+    actionButton("action", label = "Искать")
   ),
   
   mainPanel(
