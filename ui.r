@@ -16,6 +16,7 @@ shinyUI(pageWithSidebar(
   ),
   
   mainPanel(
-    textOutput("view")
+    textOutput("view"),
+   leafletOutput("mymap")
   )
 ))
