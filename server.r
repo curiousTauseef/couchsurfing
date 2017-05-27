@@ -7,9 +7,10 @@ library(tidyr)
 library(ggplot2)
 library(caret)
 library(recommenderlab)
+library(leaflet)
 
 setwd("~/couchsurfing")
-df <- fromJSON("C:/Users/Anna Schatt/Documents/couchsurfing/couch/infol1.json", flatten=TRUE)
+df <- fromJSON("infol1.json", flatten=TRUE)
 df <- bind_rows(df, .id = 'id_friend')
 
 attach(df)
@@ -61,7 +62,7 @@ shinyServer(function(input, output){
    colnames(output) = 'NAME'
     map_filtered = map[ which(map@data$NAME %in% output$NAME ), "NAME"]
     
-    output$mymap <- leaflet() %>% 
+    output$mymap <- renderLeaflet(leaflet() %>% 
       
       addProviderTiles("Esri.WorldGrayCanvas") %>% 
       fitBounds(50, 120, 20, 10) %>%
@@ -85,3 +86,4 @@ shinyServer(function(input, output){
                   group="<span style='color: #7f0000; f
   })
 })
+)
