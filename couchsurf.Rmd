@@ -19,6 +19,20 @@ library(rgdal)
 library(leaflet)
 ```
 
+```{r}
+sample <- read_csv("~/couchsurfing/sample.csv")
+ids <- sample$root_id
+sample <- sample[217:449]
+sample$user_id <- ids
+names <- colnames(sample)
+library(stringr)
+names <- str_replace_all(names, "countries.visited_", "")
+colnames(sample) <- names
+```
+
+
+
+
 # проитали json и привели в божеский вид
 ```{r}
 setwd("~/repositories/couchsurfing")
