@@ -20,7 +20,7 @@ library(leaflet)
 ```
 
 ```{r}
-sample <- read_csv("~/couchsurfing/sample.csv")
+sample <- read_csv("sample.csv")
 ids <- sample$root_id
 sample <- sample[217:449]
 sample$user_id <- ids
@@ -35,8 +35,8 @@ colnames(sample) <- names
 
 # проитали json и привели в божеский вид
 ```{r}
-setwd("~/repositories/couchsurfing")
-df <- fromJSON("infol1.json", flatten=TRUE)
+
+df <- fromJSON("couch/infol1.json", flatten=TRUE)
 df <- bind_rows(df, .id = 'user_id')
 ```
 
@@ -135,5 +135,5 @@ weight = 1, ## width of borders
 group="<span style='color: #7f0000; font-size: 11pt'><strong>2000</strong></span>")
 
 mymap
-```
+````
 

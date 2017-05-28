@@ -1,0 +1,11 @@
+name: couchsurfing
+title: couchsurfing
+account: schatt89
+server: shinyapps.io
+appId: 184172
+bundleId: 842832
+url: https://schatt89.shinyapps.io/couchsurfing/
+when: 1495885447.9059
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: bilibirda.R|preprocessed_to_dasha.csv|README.md|TM_WORLD_BORDERS-0_3.dbf|TM_WORLD_BORDERS-0_3.prj|TM_WORLD_BORDERS-0_3.shp|TM_WORLD_BORDERS-0_3.shx
