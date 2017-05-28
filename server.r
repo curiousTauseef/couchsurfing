@@ -7,9 +7,11 @@ library(tidyr)
 library(ggplot2)
 library(caret)
 library(recommenderlab)
+library(stringr)
+options(encoding = "UTF-8")
 
-setwd("~/couchsurfing")
-df <- fromJSON("C:/Users/Anna Schatt/Documents/couchsurfing/couch/infol1.json", flatten=TRUE)
+fn <- "C:/Users/Anna Schatt/Documents/couchsurfing/couch/infol1.json"
+df <- fromJSON(fn, flatten=TRUE)
 df <- bind_rows(df, .id = 'id_friend')
 
 attach(df)
@@ -48,40 +50,43 @@ recc_model <- Recommender(data = recc_data_train, method = "UBCF")
 
 recommendCountries <- function(x,z){
   recc_predicted <- predict(object = recc_model, newdata = recc_data_test, n = z)
+  print(recc_predicted)
   result <- recc_predicted@itemLabels[recc_predicted@items[[x]]]
-  return(result)
+  print(typeof(result))
+  new_res = str_replace_all(result, '\\.', ' ')
+  print(new_res)
+  return(new_res)
 }
 
 
 shinyServer(function(input, output){
   output$view <- renderText({
     recommendCountries(input$id, input$obs)
-   # output = data.frame(NAME = c('Afghanistan', 'Germany', 'Russia')) 
-   output = data.frame(output$view)
-   colnames(output) = 'NAME'
-    map_filtered = map[ which(map@data$NAME %in% output$NAME ), "NAME"]
-    
-    output$mymap <- leaflet() %>% 
-      
-      addProviderTiles("Esri.WorldGrayCanvas") %>% 
-      fitBounds(50, 120, 20, 10) %>%
-      addPolygons(data = map, 
-                  fillColor = 'green', ## we want the polygon filled with 
-                  ## one of the palette-colors
-                  ## according to the value in student1$Anteil
-                  fillOpacity = 0.6, ## how transparent do you want the polygon to be?
-                  color = "darkgrey", ## color of borders between districts
-                  weight = 1.5, ## width of borders
-                  # popup = popup1, ## which popup?
-                  group="<span style='color: #7f0000; font-size: 11pt'><strong>2000</strong></span>") %>%
-      addPolygons(data = map_filtered, 
-                  fillColor = 'red', ## we want the polygon filled with 
-                  ## one of the palette-colors
-                  ## according to the value in student1$Anteil
-                  fillOpacity = 0.6, ## how transparent do you want the polygon to be?
-                  color = "black", ## color of borders between districts
-                  weight = 1, ## width of borders
-                  # popup = popup1, ## which popup?
-                  group="<span style='color: #7f0000; f
   })
+
+  output$mymap <- renderLeaflet(leaflet() %>% 
+                                  
+                                  addProviderTiles("Esri.WorldGrayCanvas") %>%
+                                  fitBounds(50, 120, 20, 10) %>%
+                                  addPolygons(data = map, 
+                                              fillColor = 'green', ## we want the polygon filled with 
+                                              ## one of the palette-colors
+                                              ## according to the value in student1$Anteil
+                                              fillOpacity = 0.6, ## how transparent do you want the polygon to be?
+                                              color = "darkgrey", ## color of borders between districts
+                                              weight = 1.5, ## width of borders
+                                              # popup = popup1, ## which popup?
+                                              group="<span style='color: #7f0000; font-size: 11pt'><strong>2000</strong></span>") %>%
+                                  addPolygons(data = map[ which(map@data$NAME %in% data.frame(NAME = recommendCountries(input$id, input$obs))$NAME ), "NAME"], 
+                                              fillColor = 'red', ## we want the polygon filled with 
+                                              ## one of the palette-colors
+                                              ## according to the value in student1$Anteil
+                                              fillOpacity = 0.6, ## how transparent do you want the polygon to be?
+                                              color = "black", ## color of borders between districts
+                                              weight = 1, ## width of borders
+                                              # popup = popup1, ## which popup?
+                                              group="<span style='color: #7f0000; font-size: 11pt'><strong>2000</strong></span>")
+                                ) 
+                                
+                                
 })

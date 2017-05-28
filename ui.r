@@ -1,22 +1,21 @@
+options(encoding = "UTF-8")
 library(shiny)
+library(leaflet)
 
-shinyUI(pageWithSidebar(
-  
-  headerPanel("Couchsurf Recommend"),
-  
-  sidebarPanel(
-    numericInput(inputId="id", 
-              label = "Введите свой id:", 
-              value = "", 
-              width = NULL),
-    
-    numericInput("obs", "Количество вариантов:", 5),
-    
-    actionButton("action", label = "Искать")
-  ),
-  
-  mainPanel(
-    textOutput("view"),
-   leafletOutput("mymap")
-  )
-))
+  shinyUI(pageWithSidebar(
+      
+        headerPanel("Couchsurf Recommend"),
+      
+        sidebarPanel(
+            numericInput(inputId="id", 
+                                        label = "Insert your id:", 
+                                        value = "", 
+                                        width = NULL),
+            
+              numericInput("obs", "Variant count:", 5)
+          ),
+      
+        mainPanel(
+            textOutput("view"), leafletOutput("mymap")
+          )
+    ))
