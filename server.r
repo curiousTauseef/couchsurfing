@@ -29,9 +29,8 @@ sample <- as.matrix(sample)
 
 
 recommendCountries <- function(x,z){
-  if ( x != "22704") {
     python.exec("from couchsurfing import Api")
-    python.exec('api = Api("95schatt@gmail.com", "MIKKy1989")')
+    python.exec('api = Api("95schatt@gmail.com", "PASSWORD")')
     x = as.character(x)
     python.assign("x", x)
     b = python.method.call("api", "get_profile_by_id", x)
@@ -62,21 +61,9 @@ recommendCountries <- function(x,z){
     new_res = str_replace_all(result, '\\.', ' ')
     print(new_res)
     return(new_res)
-  }
-  else if (x == "22704")
-    {
-    recc_predicted <- readRDS("./recc_predicted.rds")
-    print(recc_predicted)
-    x = python.get("x")
-    x <- paste("id",x,sep="_")
-    a = recc_predicted@items[names(recc_predicted@items) == x]
-    result <- recc_predicted@itemLabels[a[[1]]]
-    print(typeof(result))
-    new_res = str_replace_all(result, '\\.', ' ')
-    print(new_res)
-    return(new_res)
-    }
 }
+
+
 
 
 recommendHosts <- function(new_res, z) {
@@ -122,18 +109,22 @@ shinyServer(function(input, output){
     
     selected_countries = recommendCountries(input$id, input$obs)
     
-    if(length(new_res) > 0){
+    if(length(selected_countries) > 0){
       
       output$view <- renderText({
         recommendCountries(input$id, input$obs)
       })
       
       output$hosts_table <- renderDataTable({
-        recommendHosts(new_res, z)
+        recommendHosts(selected_countries, input$obs)
       })
       
       new_map = map[map@data$NAME %in% selected_countries,]
-
+      
+      # pal <- colorNumeric(
+      # palette = "Blues",
+      # domain = new_map@ratings)
+      
       leafletProxy("mymap") %>% 
         clearGroup("new_res") %>%
         addPolygons(data = new_map, 
