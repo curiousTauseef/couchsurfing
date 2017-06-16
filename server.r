@@ -27,8 +27,6 @@ names <- str_replace_all(names, "countries.visited_", "")
 colnames(sample) <- names
 sample <- as.matrix(sample)
 
-x = 2005004093
-z = 5
 
 recommendCountries <- function(x,z){
   if ( x != "22704") {
@@ -81,9 +79,7 @@ recommendCountries <- function(x,z){
 }
 
 
-
-
-recommendHosts <- function(new_res) {
+recommendHosts <- function(new_res, z) {
   if (z == 5) {
     df = dplyr::filter(host_info, country == new_res[1] | country == new_res[2] | country == new_res[3] | country == new_res[4] | country == new_res[5])
   }
@@ -106,12 +102,9 @@ recommendHosts <- function(new_res) {
 
 
 shinyServer(function(input, output){
-  output$view <- renderText({
-    recommendCountries(input$id, input$obs)
-  })
   
-  output$mymap <- renderLeaflet({leaflet() %>% 
-      
+  output$mymap <- renderLeaflet({
+    leaflet() %>% 
       addProviderTiles("Esri.WorldGrayCanvas") %>%
       fitBounds(50, 120, 20, 10) %>%
       addPolygons(data = map, 
@@ -122,18 +115,37 @@ shinyServer(function(input, output){
                   color = "darkgrey", ## color of borders between districts
                   weight = 1.5, ## width of borders
                   # popup = popup1, ## which popup?
-                  group="<span style='color: #7f0000; font-size: 11pt'><strong>2000</strong></span>") %>%
-      addPolygons(data = map[ which(map@data$NAME %in% data.frame(NAME = recommendCountries(input$id, input$obs))$NAME ), "NAME"], 
-                  fillColor = 'red', ## we want the polygon filled with 
-                  ## one of the palette-colors
-                  ## according to the value in student1$Anteil
-                  fillOpacity = 0.6, ## how transparent do you want the polygon to be?
-                  color = "black", ## color of borders between districts
-                  weight = 1, ## width of borders
-                  # popup = popup1, ## which popup?
                   group="<span style='color: #7f0000; font-size: 11pt'><strong>2000</strong></span>")
   }) 
   
+  observeEvent(input$predict, {
+    
+    selected_countries = recommendCountries(input$id, input$obs)
+    
+    if(length(new_res) > 0){
+      
+      output$view <- renderText({
+        recommendCountries(input$id, input$obs)
+      })
+      
+      output$hosts_table <- renderDataTable({
+        recommendHosts(new_res, z)
+      })
+      
+      new_map = map[map@data$NAME %in% selected_countries,]
+
+      leafletProxy("mymap") %>% 
+        clearGroup("new_res") %>%
+        addPolygons(data = new_map, 
+                    group = "selected_countries",
+                    fillColor = "red", 
+                    fillOpacity = 0.6, ## how transparent do you want the polygon to be?
+                    color = "black", ## color of borders between districts
+                    weight = 1)
+    } else {
+      output$view <- renderText({ "No predicted countries" })
+    }
+    
+  })
   
 })
-

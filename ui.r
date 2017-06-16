@@ -18,6 +18,7 @@ shinyUI(fluidPage(
   
   mainPanel(
     h2(textOutput("view")),
-    leafletOutput("mymap")
+    leafletOutput("mymap"),
+    dataTableOutput('hosts_table')
   )
 ))
