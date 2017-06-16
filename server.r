@@ -33,7 +33,7 @@ z = 5
 recommendCountries <- function(x,z){
   if ( x != "22704") {
     python.exec("from couchsurfing import Api")
-    python.exec('api = Api("95schatt@gmail.com", "MIKKy1989")')
+    python.exec('api = Api("E_MAIL", "PASSWORD")')
     x = as.character(x)
     python.assign("x", x)
     b = python.method.call("api", "get_profile_by_id", x)
