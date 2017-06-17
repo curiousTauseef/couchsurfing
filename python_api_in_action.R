@@ -13,7 +13,7 @@ colnames(sample) <- names
 sample <- as.matrix(sample)
 
 python.exec("from couchsurfing import Api")
-python.exec('api = Api("95schatt@gmail.com", "MIKKy1989")')
+python.exec('api = Api("95schatt@gmail.com", "PASSWORD")')
 x = 2003965669
 x = as.character(x)
 python.assign("x", x)
