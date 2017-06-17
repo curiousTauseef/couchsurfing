@@ -19,7 +19,7 @@ This app was created by students as a final project on Data Sceince Minor progra
 
 ## The Team
 
-![Anna Golovchenko] (https://github.com/schatt89)
+![https://github.com/schatt89] (Anna Golovchenko)
 
 ![Ira Krylova] (https://vk.com/un_km)
 
