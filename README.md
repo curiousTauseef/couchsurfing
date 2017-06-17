@@ -19,12 +19,12 @@ This app was created by students as a final project on Data Sceince Minor progra
 
 ## The Team
 
-![https://github.com/schatt89] (Anna Golovchenko)
+Anna Golovchenko
 
-![Ira Krylova] (https://vk.com/un_km)
+Ira Krylova 
 
-![Alexey Belyaev] (https://vk.com/aleqsei_beliaev)
+Alexey Belyaev 
 
-![Alexey Mikhailov] (https://github.com/AlexMikhailov9)
+Alexey Mikhailov 
 
-![Yury Stiforov] (https://github.com/yuristiforov)
+Yury Stiforov
