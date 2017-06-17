@@ -31,7 +31,7 @@ sample <- as.matrix(sample)
 
 recommendCountries <- function(x,z){
     python.exec("from couchsurfing import Api")
-    python.exec('api = Api("95schatt@gmail.com", "MIKKy1989")')
+    python.exec('api = Api("95schatt@gmail.com", "PASSWORD")')
     x = as.character(x)
     python.assign("x", x)
     b = python.method.call("api", "get_profile_by_id", x)
@@ -94,7 +94,7 @@ shinyServer(function(input, output){
   output$mymap <- renderLeaflet({
     leaflet() %>% 
       addProviderTiles("Esri.WorldGrayCanvas") %>%
-      fitBounds(50, 120, 20, 10) %>%
+      fitBounds(0, -40, 20, 70) %>%
       addPolygons(data = map, 
                   fillColor = 'black', ## we want the polygon filled with 
                   ## one of the palette-colors
